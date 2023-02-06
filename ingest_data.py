@@ -1,11 +1,11 @@
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.document_loaders import NotionDirectoryLoader
+from langchain.document_loaders.unstructured import UnstructuredFileLoader
 from langchain.vectorstores.faiss import FAISS
 from langchain.embeddings import OpenAIEmbeddings
 import pickle
 
 # Load Data
-loader = NotionDirectoryLoader("Notion_DB")
+loader = UnstructuredFileLoader("state_of_the_union.txt")
 raw_documents = loader.load()
 
 # Split text
