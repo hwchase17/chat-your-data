@@ -1,6 +1,6 @@
 # Chat-Your-Data
 
-A template repo to serve as an example of how to set up a ChatGPT-like experience over your own data.
+Create a ChatGPT like experience over your custom docs using [LangChain](https://github.com/hwchase17/langchain).
 
 See [this blog post](TODO) for a more detailed explanation.
 
