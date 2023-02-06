@@ -1,5 +1,5 @@
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.document_loaders.unstructured import UnstructuredFileLoader
+from langchain.document_loaders import UnstructuredFileLoader
 from langchain.vectorstores.faiss import FAISS
 from langchain.embeddings import OpenAIEmbeddings
 import pickle
