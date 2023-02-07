@@ -1,17 +1,15 @@
-import pickle
-from query_data import get_chain
+from query_data import load_front_agent
+from tools import load_tools
 
 
 if __name__ == "__main__":
-    with open("vectorstore.pkl", "rb") as f:
-        vectorstore = pickle.load(f)
-    qa_chain = get_chain(vectorstore)
+    tools = load_tools(["get_recent_tweet", "search_from_docs"])
+    agent = load_front_agent(tools)
     chat_history = []
     print("Chat with your docs!")
     while True:
         print("Human:")
         question = input()
-        result = qa_chain({"question": question, "chat_history": chat_history})
-        chat_history.append((question, result["answer"]))
+        result = agent({"input": question, "interviewee_name": settings.interviewee_name})
         print("AI:")
-        print(result["answer"])
+        print(result["output"])

@@ -1,34 +1,44 @@
-from langchain.prompts.prompt import PromptTemplate
-from langchain.llms import OpenAI
-from langchain.chains import ChatVectorDBChain
-
-_template = """Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
-You can assume the question about the most recent state of the union address.
-
-Chat History:
-{chat_history}
-Follow Up Input: {question}
-Standalone question:"""
-CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(_template)
-
-template = """You are an AI assistant for answering questions about the most recent state of the union address.
-You are given the following extracted parts of a long document and a question. Provide a conversational answer.
-If you don't know the answer, just say "Hmm, I'm not sure." Don't try to make up an answer.
-If the question is not about the most recent state of the union, politely inform them that you are tuned to only answer questions about the most recent state of the union.
-Question: {question}
-=========
-{context}
-=========
-Answer in Markdown:"""
-QA_PROMPT = PromptTemplate(template=template, input_variables=["question", "context"])
+from langchain import LLMChain, OpenAI
+from langchain.agents import AgentExecutor, ZeroShotAgent
+from langchain.chains.conversation.memory import ConversationBufferMemory
 
 
-def get_chain(vectorstore):
-    llm = OpenAI(temperature=0)
-    qa_chain = ChatVectorDBChain.from_llm(
-        llm,
-        vectorstore,
-        qa_prompt=QA_PROMPT,
-        condense_question_prompt=CONDENSE_QUESTION_PROMPT,
+
+def load_front_agent(tools):
+    prefix = """Answer a question about {interviewee_name} as best you can.
+                If a question is not about {interviewee_name}, answer 'I think your question is not about {interviewee_name}.
+                answer very politely so that people will like {interviewee_name}.
+                You have access to the following tools:"""
+    suffix = """Begin! Remember to answer very politely so that people will like {interviewee_name}.
+    Previous conversation history:
+    {chat_history}
+
+    Question: {input}
+    {agent_scratchpad}"""
+
+    prompt = ZeroShotAgent.create_prompt(
+        tools,
+        prefix=prefix,
+        suffix=suffix,
+        input_variables=[
+            "input",
+            "agent_scratchpad",
+            "interviewee_name",
+            "chat_history",
+        ],
     )
-    return qa_chain
+
+    memory = ConversationBufferMemory(
+        memory_key="chat_history", input_key="input", output_key="output"
+    )
+    llm = OpenAI(temperature=0)
+    llm_chain = LLMChain(llm=llm, prompt=prompt)
+    agent = ZeroShotAgent(llm_chain=llm_chain, tools=tools)
+    agent_executor = AgentExecutor.from_agent_and_tools(
+        agent=agent,
+        tools=tools,
+        verbose=True,
+        memory=memory,
+        return_intermediate_steps=True,
+    )
+    return agent_executor
