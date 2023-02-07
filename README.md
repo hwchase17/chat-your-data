@@ -19,7 +19,7 @@ The BOT is instructed to reply in a way that the questioner will like the interv
 # 👀 Let's try!
 You can try this bot at [here](https://about-yongtae-cfa5uiil5a-an.a.run.app/).
 # 🧠 Basic architecture
-![architecture](/documents/architecture.png)
+![architecture](/architecture.png)
 
 This repository is made based on [🦜️🔗 LangChain](https://github.com/hwchase17/langchain), which is excellent library to make text generation application.
 
