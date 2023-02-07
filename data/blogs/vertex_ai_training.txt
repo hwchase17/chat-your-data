@@ -1,0 +1,161 @@
+2022-05-13
+Code written in Hydra can be hyper-parameterized in Vertex AI
+GCP Machine Learning Vertex AI Data Science Hydra
+Background
+The Problem
+Formats described in official Vertex AI documentation
+Format of Hydra
+Solution
+Creation of a script to convert to Hydra format and execute the original training code
+Hydra code was used to adjust Vertex AI hyperparameters.
+Summary
+Supplemental: Team approach to R&D
+We are looking for people who are willing to take on challenges together with us.
+
+
+Hello, my name is Tanaka, and I am an intern on the ML team at JX Press. I have been working on object detection, image classification using deep distance learning, AI creation such as natural language classification and generation, and MLOps. This time, I took on the challenge of parallelizing hyper-parameter adjustment for document generation AI under the supervision of ML engineer Yonte.
+
+The sample code to adjust hyper-parameters with Vertex AI for codes written in Hydra is available on github! Please give it a try! 😊
+
+
+github.com
+
+Background
+The ML team at JX Press has been creating template codes for machine learning based on the philosophy of "Let's focus our power where it should be used", which includes PyTorch Lightning and Hydra.
+
+Please read the explanatory article written by Yonte about the philosophy and template codes.
+
+
+tech.jxpress.net
+
+tech.jxpress.net
+
+Training a document generation AI takes about several hours per training.
+
+If the learning of hyper-parameter adjustment is run in series on a single machine, it will take more than one learning time x number of learning attempts, as shown in the example above in Figure 1, and will take more than a few days.
+
+
+Figure 1 Comparison of the time required to complete hyperparameter tuning when training on a single machine (top example) and when training on multiple machines in parallel (bottom example). The Vertex AI hyperparameter tuning can not only parallelize learning, but also perform Bayesian optimization by connecting parallel learning in a series, which enables cost-effective and highly accurate search for optimal parameters. *1
+One of the values we hold dear at JX Press is Speed, and to support this philosophy from the ML side as well, we aim to finish learning faster and accelerate the speed of business development.
+
+Therefore, we would like to run many experiments in parallel when adjusting hyper parameters . Such parallel training can be easily achieved using Vertex AI, a fully managed ML service (see example below in Figure 1).
+
+On the other hand, the hyperparameter adjustment function of Vertex AI Training was incompatible with Hydra used in JX Press's template code, and could not be used as is.
+
+The problem
+In hyper-parameter adjustment, the Vertex AI side passes hyper-parameters to the training container using command line arguments for learning, and after the learning is finished, the optimization evaluation values are communicated to the Vertex AI using a dedicated library.
+
+However, as shown below, the command line argument format passed by Vertex AI and the corresponding command line argument format by Hydra are different, so I could not get it to work.
+
+The format described in the official documentation of Vertex AI
+argparse is recommended
+
+python3 -m my_trainer --learning_rate learning-rate-in-this-trial
+⚠️ Note
+
+As far as I have been able to determine, the actual format given is not the above, but rather the following
+
+--learning_rate=learning-rate-in-this-trial
+
+The recommended argparse is
+
+The recommended argparse will also accept this format.
+
+Hydra's format
+python3 my_trainer.py learning_rate=learning-rate-in-this-trial
+Solution
+There are several possible solutions.
+
+Wait for Vertex AI to support the Hydra format
+
+→ This is the best solution, but we don't know if it will be supported.
+
+Use Optuna, an open source framework for automatic hyperparameter optimization, instead of using Vertex AI's hyperparameter adjustment function.
+
+→ Use Hydra+Optuna in series instead of parallel, which is convenient because it is complete in one instance and can be run in different environments. However, when running in parallel instead of on the same machine, it is difficult because it is necessary to set up a SQL server. (About Optuna parallelism)
+
+Use a supported command line argument analysis library such as argparse.
+
+→ Recommended, but it is difficult to define a parser, and configuration files cannot be used.
+
+Execute with a process to convert the format of arguments passed by Vertex AI in between
+
+→ This is aggressive, but the lowest cost to implement.
+
+In this case, we adopted the least expensive option 4.
+
+Creating a script to convert to Hydra format and execute the original training code
+First, we consider the conversion of input (command line arguments) passed from Vertex AI to the container. This time, we used shell script to convert command line arguments.
+
+In shell script, the first argument is taken as $1, and the nth argument is taken as $n. In this case, the number of arguments is variable, so $@ is used to receive the entire argument as a string.
+
+Next, the received string is converted to Hydra format by regular expression substitution.
+
+Since this is a shell script, the sed command is used to perform the regular expression substitution.
+
+The following command will be used for the argument format
+
+--key=value and --key value are both accepted.
+
+sed -r 's/--([^= ]*)[= ]([^ ]*)/\1=\2/g'
+The sed command is similar to Vim's substitution, with / delimited by s/regex/substitution/flags, where (expr) corresponds to \1, \2) and the final g corresponds to multiple substitutions. The g at the end is the flag for multiple substitutions. Also, the sed command does not support shortest match, and it handles it by repeating all characters except the one after the one you want to match. ([^ ]* place, etc.)
+
+Execution example
+❯ echo "--lr=0.001 --batch-size 64" | sed -r 's/--([^= ]*)[= ]([^ ]*)/\1=\2/g'
+
+lr=0.001 batch-size=64
+Finally, the original training code can be executed using the converted arguments.
+
+Since $(expr) accepts the result of executing expr as a string
+
+python train.py $(echo $@ | sed -r 's/--([^= ]*)[= ]([^ ]*)/\1=\2/g') # train.py is code using Hydra
+then the converted arguments can be added after the execution command of the original training code.
+
+Then, create a file with this as train.sh, etc., and add it to the Vertex AI configuration file's execution command as . /train.sh" in the Vertex AI configuration file. The location of the configuration file execution command is HyperparameterTuningJob.trialJobSpec.workerPoolSpec.containerSpec.command (reference).
+
+Hydra's code was able to adjust the Vertex AI hyperparameters.
+As a result of these innovations, we were able to compute hyperparameter adjustment in parallel with Vertex AI (Figures 2~4). In Figures 3 and 4, there are multiple colored lines at the same time, which means that multiple instances are learning in parallel.
+
+This allowed us to finish in a few hours what previously would have taken several days of learning!
+
+
+Figure 2: Each trial of hyperparameter adjustment and the hyperparameter values used in that trial. Specific variable names are hidden.
+
+Figure 3: Transition of CPU utilization during hyperparameter adjustment in Vertex AI. The color of each line corresponds to each trial.
+
+Figure 4: Transition of GPU utilization during hyperparameter adjustment for Vertex AI. The color of each line corresponds to each trial.
+Conclusion
+During the Vertex AI hyper-parameter adjustment job, we were able to convert the hyper-parameters passed from Vertex AI into a format that Hydra can accept by inserting a script and converting the parameter format using regular expressions.
+
+This enabled us to adjust the hyperparameters in parallel while using the existing code with Hydra, thus reducing the learning time. A sample code for this project is available on github. We hope this code will be useful to you.
+
+There may be a better way other than this one. I am still in the process of learning, so I would appreciate any advice on how to improve it.
+
+Supplement: How to work on R&D as a team
+As I mentioned in this blog, JX Press is using a template code based on Pytorch Lightning for learning, so that the team can conduct experiments efficiently.
+
+If you are interested, you can also read the following blogs
+
+
+tech.jxpress.net
+
+tech.jxpress.net
+
+We are looking for people who are up for the challenge with us!
+We are actively looking for people, both employees and interns, who want to develop ML for a better society while growing with us! We are not only looking for ML engineers, but also engineers of all kinds!
+
+We also have a "trial employment" program that allows you to work as a full-time employee, intern, or as a side job/return to work on a trial basis to learn about our culture and work style before deciding whether to officially join the company! If you are at all interested, please take a look here!
+
+*1:⚠️ Further advantages of using Vertex AI
+
+There are two main ways to adjust hyperparameters
+
+(1) A method in which hyperparameters are determined in advance of an experiment, and the parameters with the best performance are used (Grid search is a well-known example of this method).
+
+(2) The method of searching for the optimal hyperparameters by conducting an experiment with a certain hyperparameter and, based on the results, conducting another experiment with a certain hyperparameter and repeating the process (Bayesian estimation is a well-known example of this method).
+
+In the case of (1), the hyperparameters to be searched for are determined before the experiment, so all the experiments can be conducted in parallel at once, and the first experiment in the example below in Figure 1 can be completed. However, since the hyperparameters are chosen on an ad hoc basis, there are many unnecessary calculations, and the cost of obtaining the optimal hyperparameters may be enormous.
+
+On the other hand, in method (2), hyperparameters are selected strategically, so the optimal parameters can be searched for cost-effectively and precisely. However, since the hyperparameters to be explored in the next experiment depend on the results of the previous learning, it is not possible to run all the learning in parallel at once.
+
+If parallel learning could be connected in series, we could benefit from both parallel learning and Bayesian optimization, but this is generally very difficult to implement. However, with Vertex AI, it is possible to serialize parallel learning with very little effort.

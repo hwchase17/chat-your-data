@@ -1,0 +1,105 @@
+2021-11-17
+Heavy User Explains PyTorch Lightning
+CNN Data Analysis Data Science PyTorch DeepLearning ComputerVision BERT PyTorch Lightning
+Hello! My name is Juan Yong Tae and I am a Machine Learning Engineer at JX Press! I've been a heavy user of PyTorch Lightning since I was impressed by how useful it was the first time I used it! I am publishing this article as a baby user to introduce you to PyTorch Lightning and to inspire you to use it!
+
+The sample code for this article can be found here. Please take a look at the actual code and experience the beauty of PyTorch Lightning!
+
+This article was presented at the 13th MLOps Study Group! 
+speakerdeck.com
+
+Target Audience.
+PyTorch Vs PyTorch Lightning
+About PyTorch
+About PyTorch Lightnings
+Why PyTorch Lightning at JX Press
+What is PyTorch Lightning?
+The Flexibility of PyTorch Lightning
+How to Write PyTorch Lightning
+Science-Related Parts of PyTorch Lightning
+Data (LightningDataModule)
+Learning (LightningModule)
+How to start learning
+Summary of how to write science-related code
+How to write the code for the non-science part (displaying and saving the results)
+Using TorchMetrics
+Displaying Results
+How to save the results
+How to write code for non-science related parts (callback : saving models and early stopping)
+About callback
+Using callback at JX Press
+Model saving and early stopping
+How to write code for non-science parts (learning on GPU /TPU /IPU)
+Increase learning speed with GPU, TPU
+How to use GPU, TPU in Lightning
+Using TPU with Colab
+Wrappers above PyTorch Lightning (PyTorch Lightning Flash)
+Personal use of PyTorch Lightning Flash
+We are looking for people who want to join us in the challenge!
+We want to get PyTorch Lightning going in Japan!
+Target Readers
+People who want to use PyTorch Lightning but don't know how to get started.
+People who have some familiarity with PyTorch
+PyTorch Vs PyTorch Lightning
+About PyTorch
+PyTorch is a popular framework used to perform Deep Learning, but it is highly flexible and can be written in any way you like. While this is an advantage, there is a risk of very low readability. Also, there are many times to write code differently from the science aspect, such as saving the model and results during training, which takes a lot of time for coding. Therefore, if machine learning is to be done with PyTorch, the data scientist needs to be able to do two things: science and coding.
+
+f:id:yoooongtae:20211112121029p:plain
+Figure 1: Work performed by ML engineers when using PyTorch
+About PyTorch Lightning
+On the other hand, if data scientists want to fully leverage their power and do something innovative and previously unimagined, they should focus their efforts on the science area rather than the coding part.
+
+PyTorch Lightning minimizes the amount of time spent on coding and allows data scientists to devote their full attention to the science part.
+
+f:id:yoooongtae:20211112121449p:plain
+Figure 2 PyTorch Lightning allows you to focus on the science part
+Why PyTorch Lightning at JX Press?
+The ML team at JX Press values the philosophy of "focusing on where the power should be used," and one of the ways we are trying to do this is by creating and operating a learning and deployment template code. The template is written based on PyTorch Lightning. For more details, please refer to this blog.
+
+What is PyTorch Lightning?
+PyTorch Lightning is a wrapper for PyTorch that was created based on the concept that "data scientists should focus on the science, with minimal coding effort. As described below, PyTorch Lightning has a specified way of writing code, and the main part of the code is the part related to the science (model architecture, training methods, preprocessing methods, etc.). This moderate correction in the way the code is written also has the effect of making it more readable across teams! Also, the parts related to complex codings such as training on GPUs and TPUs, saving the model and results, etc. can be done by adding a few lines of code.
+
+f:id:yoooongtae:20211112121356p:plain
+Figure 3: Adapted from the PyTorch Lightning website
+About PyTorch Lightning's flexibility
+Some people may feel that PyTorch Lightning lacks flexibility and that there are some experiments that cannot be performed with PyTorch Lightning. Some people may feel that PyTorch Lightning lacks flexibility and that some experiments cannot be performed. However, the philosophy of PyTorch Lightning is to maximize flexibility, and almost all experiments can be reproduced.
+
+f:id:yoooongtae:20211112121738p:plain
+Figure 4From Lightning Design Philosophy Github
+In my personal opinion, having used PyTorch Lightning for a long time, as described in this blog, I have rarely had any problems with writing PyTorch Lightning in my work, and have only enjoyed the benefits. (However, I once got bogged down in writing an Optimizer when trying to write semi-supervised learning in PyTorch Lightning, and spent a lot of extra time and effort...)
+
+How to write PyTorch Lightning
+The science involved
+PyTorch Lightning has a framework of how to write, and we described how to fill it in. In this page, we will describe how to write PyTorch Lightning with an awareness of the differences between PyTorch Lightning and PyTorch. This movie is very easy to understand, so please watch this movie before reading the chapter below. A sample code that works with Google Colab can be found here. Not everything in the blog corresponds one-to-one, but you can try it for yourself!
+
+PyTorch Lightning is divided into two main parts: the data part (Dataset, Dataloader, etc.) and the training part (model structure, how to write training loops).
+
+The part related to data (LightningDataModule)
+In PyTorch, the data used for training is described using DataLoader and Dataset in torch.utils.data. In PyTorch Ligthning, we create a class that inherits from LightningDataModule and calls train_ The same is true for validation and test (Fig. 5). It is important to note that the function name must not be changed. This way, the function name is completely defined, so it is easier for other team members to read the code and know what data is being used where. LightningDataModule defines many more functions than the ones introduced on this page; please refer to the official documentation for more information about LightningDataModule.
+
+f:id:yoooongtae:2021111115112938p:plain
+Figure 5 About LightningDataModule
+The part about learning (LightningModule)
+In PyTorch, the structure of the model is determined in a class that inherits from torch.nn module, and then the learning loop is often defined in train.py or other files. In PyTorch Lightning, the structure of the model and the computational behavior in the learning loop are defined in a LightningModule.
+
+Figure 6 shows the minimum code required for LightningModule. First, the parts of the model are defined in init, and the structure of the model (calculation flow) is defined in forword (same as PyTorch up to this point).
+
+Next, in PyTorch Lightning, we describe how we want the model to compute at each step of the training loop. In Figure 6, a function called training_step() is defined, which describes how to perform calculations when a mini-batch of the learning loop is given. Here, Lightning performs back propagation and optimization based on the value of "loss" in the return dict. Optimizers and schedulers used in this process must be defined in configure_optimizers().
+
+In Figure 6, only training_step (processing for training mini-batch) is described, but it is possible to describe what you want to be done at each step of the training loop, such as training_epoch_end, validation_step, validation_epoch_end, and on_fit_start. The PyTorch also allows you to describe what you want to be done at each step of the training loop.
+
+In PyTorch, when describing the training loop, it is necessary to move the data and model to the CPU or GPU, so it is necessary to write .to(device) everywhere. For more information about LightningModule, including other functions, please see here.
+
+f:id:yoooongtae:20211115113357p:plain
+Figure 6 About LightningModule
+How to start learning
+To learn using the LightningDataModule and LightningModule defined above, define a Trainer, which will be trained with trainer.fit (Figure 7).
+
+f:id:yoooongtae:20211115113500p:plain
+Figure 7Learning is started in Trainer. The figure on the right shows the actual code The lower figure shows the console display when the study is started
+Summary of how to write science-related code
+On this page, we have described how to write science-related code, and if you are using PyTorch Lightning, you will spend a lot of time implementing the science part described above! On the other hand, if you have read this far, you may have wondered the following questions
+
+How do I display and save the results?
+How do we save the model?
+How do we specify the device for the study? If you are using Lightning, you can finish this with a few additional lines of code.

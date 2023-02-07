@@ -2,3 +2,5 @@ langchain
 openai
 unstructured
 faiss-cpu
+git+https://github.com/twintproject/twint.git@origin/master
+nest_asyncio

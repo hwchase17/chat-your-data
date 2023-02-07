@@ -1,0 +1,20 @@
+A reverse stroke characterizes the force generation of cardiac myofilaments, leading to an understanding of heart function
+Yongtae Hwang, Takumi Washio, Toshiaki Hisada https://orcid.org/0000-0001-8091-9567, +1, and Motoshi Kaya https://orcid.org/0000-0002-3485-0375 higuchi@phys.s.u-tokyo.ac.jpAuthors Info & Affiliations
+
+
+Significance
+Force measurements on cardiac myosin molecules and polymerized myofilaments demonstrated that single molecules transition back and forth between three molecular conformations when bound to an actin filament that is experiencing a resistive load, as would be the case in a contracting heart.
+These distinct positions correspond to a pre–power stroke state and two post–power stroke states.
+The experimental data are coupled with modeling to predict ensemble behavior and collectively demonstrate that the reversal stroke is a key feature of cardiac muscle that allows for the maintenance of the high force production necessary for cardiac contraction and rapid cardiac relaxation in the heart.
+Thus, the study provides evidence that the reverse stroke may be a critical feature for normal cardiac function.
+
+Abstract
+Changes in the molecular properties of cardiac myosin strongly affect the interactions of myosin with actin that result in cardiac contraction and relaxation.
+However, it remains unclear how myosin molecules work together in cardiac myofilaments and which properties of the individual myosin molecules impact force production to drive cardiac contractility.
+Here, we measured the force production of cardiac myofilaments using optical tweezers.
+The measurements revealed that stepwise force generation was associated with a higher frequency of backward steps at lower loads and higher stall forces than those of fast skeletal myofilaments.
+To understand these unique collective behaviors of cardiac myosin, the dynamic responses of single cardiac and fast skeletal myosin molecules, interacting with actin filaments, were evaluated under load.
+The cardiac myosin molecules switched among three distinct conformational positions, ranging from pre– to post–power stroke positions, in 1 mM ADP and 0 to 10 mM phosphate solution.
+In contrast to cardiac myosin, fast skeletal myosin stayed primarily in the post–power stroke position, suggesting that cardiac myosin executes the reverse stroke more frequently than fast skeletal myosin.
+To elucidate how the reverse stroke affects the force production of myofilaments and possibly heart function, a simulation model was developed that combines the results from the single-molecule and myofilament experiments.
+ The results of this model suggest that the reversal of the cardiac myosin power stroke may be key to characterizing the force output of cardiac myosin ensembles and possibly to facilitating heart contractions.

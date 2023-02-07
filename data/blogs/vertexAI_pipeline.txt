@@ -1,0 +1,130 @@
+Code written in Hydra can now run in the Vertex AI Pipeline
+Editing
+Background
+About ML Pipeline
+What is the ML Pipeline?
+What is the Vertex AI Pipeline?
+Hydra and Vertex AI Pipeline
+The Problem
+Solutions
+How it works
+Create container images for each component
+data prepare
+train
+Configure each component
+Connect each component
+Summary
+
+
+Background
+Hello! My name is Juan Yong Tae, Senior ML Engineer at JX Press, Inc. At JX Press, machine learning is performed using a common in-house template code for team development of R&D, which tends to be a bit too personalized. The template code uses Hydra as a hyperparameter management package.
+
+However, there are some incompatibilities between Hydra and Vertex AI (GCP's managed ML service), which can lead to errors without any effort. In my last blog, I presented a devise and sample code for Vertex AI hyperparameter adjustment in code written in Hydra.
+
+
+tech.jxpress.net
+
+github.com
+
+After a brief introduction to the ML Pipeline, this blog entry describes how to make code written in Hydra work with the Vertex AI Pipeline. Sample code is also available, and we hope it will be helpful to as many people as possible.
+
+
+github.com
+
+About ML Pipeline
+What is ML Pipeline?
+Machine learning training consists of various processes such as data preprocessing, learning, and evaluation. A learning system that performs these processes on a single machine or container is commonly referred to as a Monolith system (Figure 1 (a)). Many people's first experience with machine learning may have been on a Monolith system.
+
+On the other hand, when considering machine learning systems up to production operation, it is important to
+
+Ensuring reproducibility of data and models
+Example: If randomness is included in each process, it is difficult to grasp the factors that caused the results to change in a monolithic system where all processes are performed consistently.
+Different processes require different machine specifications
+Example: Some processes need high memory, others need GPU instead of memory
+Processes are independent, so they can be easily used in different applications.
+For these reasons, learning with a pipeline system, where individual processes (commonly called components) are processed independently, is recommended (Figure 1 (b)).
+
+
+Figure 1 Learning system. (a) In a Monolith system, all processes such as preprocessing, learning, and evaluation are performed on the same machine or container. (b) In a Pipeline system, each process is separated and executed on independent resources. In a Pipeline system, data between components is routed through external Storage or DB.
+For more information on ML Pipeline, see what-a-machine-learning-pipeline-is-and-why-its-important and Full Stack Deep Learning. Also, Google's blog (Rules of Machine Learning:Best Practices for ML Engineering) describes ML learning as being based on the use of pipelines.
+
+What is the Vertex AI pipeline?
+As you can imagine, building a system from scratch that divides a learning pipeline into components, each of which runs on a different machine, would be extremely complex and difficult. On the other hand, with Vertex AI Pipeline, you can easily build an ML Pipeline in collaboration with other services in GCP, as shown in Figure 2.
+
+
+Figure 2: Vertex AI Pipeline system example. Docker Images are managed by Artifact Registry and Container Registry, and each component is processed using resources such as GCE. Training data and AI models can be stored in Google Cloud Storage, and Vertex AI Pipeline makes it easy to build ML Pipelines in conjunction with these GCP services.
+For other benefits of Vertex AI Pipeline and more details, please refer to the following excellent blog and sample code. Especially for the author, understanding Sugiyama's blog and running the sample code on his own has helped him a lot in his introduction to ML Pipeline, so please try the sample code on your own! I think you will experience how easy it is to build an ML Pipeline with Vertex AI.
+
+Official Google Documentation
+Sugiyama's blog and sample code
+Tonouchi's blog and sample code
+Hara's blog
+Hydra and Vertex AI Pipeline
+Hydra is a very nice library for hyperparameter management, and as shown in this example, various learning codes are being worked on. On the other hand, problems arise when trying to use containers described in Hydra as components of the Vertex AI Pipeline.
+
+The Problem
+Vertex AI defines the arguments to be passed to each component in a yaml file called "args". In this case, the official way of writing Vertex AI is
+
+    command: [python3, main.py]
+    args: [
+      --project, {inputValue: project},
+    ]
+The args must be written like this: [ --project, {inputValue: project}, ]. If args is written in this way, the following argparse-style command will be passed to the container.
+
+python3 main.py --project <value of project>
+On the other hand, for a container using Hydra
+
+python3 main.py project=<value of project>
+without any special care, an error will occur.
+
+Solution
+Change the format of the yaml file to
+
+    command: [python3, main.py]
+    args: [
+      'project={{$.inputs.parameters["project"]}}',
+    ]
+(Figure 3).
+
+
+Figure 3: Overview diagram of why and how to modify the commands in the YAML file. Using the official coding style in written in Hydra will result in an error. To avoid the error, the code must be rewritten.
+Commonly used arguments in Vertex AI and the corresponding conversion methods are listed in Table 1.
+
+
+
+Table 1 : Correspondence table of recommended argument passing methods in Vertex AI converted for Hydra
+
+Official Writing Methods to Convert to Hydra Format
+--input-val, {inputValue: Input_name} input-val={{$.inputs.parameters['Input_name']}}
+--input-path, {inputPath: Input_path_name} input-path={{{$.inputs.artifacts['Input_path_name'].path}}
+--output-path, {outputPath: Output_path_name} output-path={{{$.inputs.artifacts['Output_path_name'].path}}
+Putting it into action
+As a simple example, we will show you how to build an AI PIpeline for MNIST classification. sample code is available here, and the README describes how it works based on the code.
+
+Pipeline is a simple and easy to use interface that uses the following methods
+
+data prepare : download MNIST data
+
+train : perform training
+
+train : train on MNIST data. Both components are written in Hydra.
+
+
+Figure 4 Pipeline to be created in this blog
+Create container images for each component
+data prepare
+The data prepare component is described here. This component is also written in Hydra for easier management. Specifically, write the necessary functions in the functions folder. Then, in config.yaml, the functions to be processed can be determined as parameters by describing the functions to be processed and their arguments.
+
+train
+The training component was done using the Hydra and PyTorch Lightning code introduced in the previous article.
+
+Configuring each component
+Component configuration is done in the config folder; see the official documentation or the Kubeflow website for details on how to write the config file.
+
+As a note here, args will cause an error if written in the official way, so it needs to be rewritten as shown in Table 1.
+
+Connection of each component
+The connections for the defined components are defined in pipeline.py and compiled. The json created by the compilation is submitted to Vertex AI Pipeline, and the pipeline is executed.
+
+Conclusion
+In this article, we have described some of the problems and challenges in making the Vertex AI Pipeline work with code written in Hydra. We hope this blog has been helpful to you.

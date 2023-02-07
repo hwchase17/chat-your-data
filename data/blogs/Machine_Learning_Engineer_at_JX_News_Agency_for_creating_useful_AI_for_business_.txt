@@ -1,0 +1,92 @@
+Machine Learning Engineer at JX Press for creating useful AI for business / Yong Tae Hwang
+
+
+Profile
+
+Name: Yong Tae Hwang, Yuta Hwang (ML Engineer)
+
+D. in Physics from the University of Tokyo in March 2021, and joined JX Press in June 2021. He currently works as a machine learning engineer and data analyst. With the motto, "Challenge everything," he is always willing to try new fields without hesitation.
+
+An environment that allows him to take on new challenges Reasons for joining JX Press's Machine Learning Engineer
+How did you join JX Press?
+
+After obtaining my Ph.D., I had two major aspirations for my work as an AI engineer: One was to develop AI that would have a large social impact and contribute to society. The other is my desire to break out of the field I have been involved in and challenge myself in a new field.
+
+━Have you known about JX Press for some time?
+
+I learned about JX Press through an agent, but I felt that I could have a greater social impact in the same field of AI development, based on FASTALERT's business activities, such as providing various risk information and marketing research. I thought there was an element of daring to choose a challenging task and tackle something big.
+
+I decided to join the company based on my intuition that "here, I can achieve both of my ambitions at the same time.
+
+What I find most rewarding is the speed of the work.
+
+What kind of work do you do now?
+
+I am developing an AI that determines risk information for companies based on information from social networking services, etc., an AI that analyzes user opinions, and an AI that summarizes text.
+
+━What do you feel about your job now that you have been with the company for six months?
+
+I have been in the research field until now, and I feel that the sense of speed required in terms of work is very fast. I have to accelerate to keep up with the overall sense of speed of work to make it in time. One experiment has to be done in one or two months, so we need to increase the cycle speed, and we are also building a foundation to increase the speed of the experiment cycle. Not only that, but the results of each experiment are all directly related to the results of the project, so when the results of an experiment are better, I can feel that I am growing. To be honest, it is quite hard work, but I enjoy doing it and find the speed of the work very rewarding.
+
+The ML team is results-oriented, and we are able to work proactively.
+
+What is the composition of the ML team?
+
+Our team consists of three people who mainly work on data analysis and two people who mainly work on AI development, including deep learning.
+
+How do you usually go about your work?
+
+The ML team does not work in a way where we are told by our seniors to do something this way or that. We respect each other because we each have our own ideas, and while we may give advice, we don't force them on each other. Results are everything here, so you could say we are results-oriented.
+
+Although much of the work is difficult, everyone in the ML team works on experiments with a lot of independence.
+
+Because there is a direct link between the business and the results of AI, discussions with the business side, experimental plans, and experiments are all done voluntarily. I don't think there are any members who are waiting for orders.
+
+━Are there any other unique characteristics of the JX Press?
+
+The impression I have had since I joined the company is that there are no prohibitions against doing 00. Basically, we are free to do whatever we want. For example, when I say that I need this equipment or service for an experiment, I am basically not denied. If it is for the sake of business or results, it is a climate where it is accepted to spend the necessary cost properly.
+
+It is both surprising and rewarding to work at a company where you are free to do whatever you want to do.
+
+For someone who wants to take the initiative and do something, it is surprising that there is no frustration that you have to obey your boss anyway.
+
+What are some of the other things that have surprised you since joining the company?
+
+I was surprised to find that there is a place to tweet on the company Slack (*times channel, also known as the "minutes channel"). I tweeted lightly, "I wish I could use 00," and they picked it up and told me I could use it. I feel that this is a position and feeling of being a salaried worker but not a salaried worker.
+
+I am glad that JX Press provides a playground, or cloud playground, or testing ground, where I can challenge myself without hesitation. I am happy to have an environment where I can challenge myself without hesitation.
+
+I want to create AI that is highly sought after by people.
+
+━What kind of work do you want to do in the future?
+
+JX Press's work has a strong emphasis on disaster prevention and protecting people's lives, so in a nutshell, I want to create AI that has a social impact and is highly sought after by people.
+
+I may be dreaming too much, but I would like to create something that can become a standard AI for the industry in which it will be used. For example, a situation where everyone will always choose this among social listening and disaster management AIs. In other words, I want to create an AI that everyone uses as a matter of course.
+
+We want to work with people who are self-driven and proactive, and who are willing to engage in friendly competition.
+━What appeals to you about the ML team?
+
+Well, the ML team at JX Pressis full of cheerful people, and we get along so well with each other that I don't think it is any other ML engineering team at other companies.
+
+They are thoroughly committed to visualizing each person's strengths, reducing waste, and maximizing the team's results. We are working as a team to know each person's strengths so that we can create better value. This is what is summed up in the good team relationships.
+
+━What is your message to prospective employees?
+
+I have been with JX Press for a few months now, and I wanted to tell you this. Since the beginning of my employment, they have trusted me and I have been working almost freely.
+
+I think the ML team at JX Press is suited for people who have a strong desire to do something, who achieve it on their own, and who work independently.
+
+I think the beauty of the JX Press ML team is that everyone is aware of respecting each other and growing as a team by listening to each other's opinions seriously and maximizing their strengths.
+
+Another great thing about our ML team is that we are very conscious of "creating AI that is useful for our business," and we can feel that the AI we have created is contributing to our business right away!
+
+As an ML engineer, I would like to work with people who have the ability to run on their own, take initiative, and engage in friendly competition.
+
+
+Hwang Yong-tae also writes an internal engineering blog for JX Press, and you can read more about the ML team on his blog here.
+
+How we at JX Communications Inc. develop R&D that tends to belong to a team - Engineer Blog at JX Communications Inc.
+Hello! My name is Hwangyong Tae, ML Engineer at JX Press, Inc. I do my best every day to maximize the results not only for myself but also for the ML team! In order to maximize the use of human resources, the ML team at JX Press has adopted the slogan, "Focus only where the power should be used! to maximize the use of human resources. This time, I would like to share with you in more detail what I presented at the joint study session of Churadata and our company. ...
+https://tech.jxpress.net/entry/2021/10/27/160154
+If you are interested in reading this story, please feel free to apply for an engineering position at JX Press. Employees, side hires, freelancers, or any other type of work is welcome. We are open to anyone, even if you just want to hear what we have to say first! We are open to anyone, even if you are just interested in working for us.

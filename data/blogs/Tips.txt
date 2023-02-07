@@ -1,0 +1,134 @@
+2022-08-18
+Tips and cautions when intensively adding data for a certain Class during AI development.
+Data Science Data Analysis Machine Learning
+Hi! My name is Juan Yongte, Senior ML Engineer at JX JX Press. I usually work hard to develop AI that has high value for customers (in other words, can make customers happy). To achieve this, we need to increase the speed of AI development and find a direction to increase customer happiness by allowing customers to try various AI and its presentation.
+
+To improve efficiency and increase the speed of AI development, JX Press has been working on a number of innovations, which we have blogged about in the past.
+
+
+tech.jxpress.net
+
+
+tech.jxpress.net
+
+
+tech.jxpress.net
+
+In this article, we will summarize the background, tips and cautions when intensively adding data for a certain Class in this effort!
+
+Table of Contents
+Table of Contents
+Background
+Data Creation Procedure
+Simple Filters
+Creating a system to determine which data is appropriate for a Class
+Both appropriate data and inappropriate data for the target Class are important
+Re-label the data that is not appropriate for the target Class
+Conclusion
+Supplementation
+Supplement 1: Use a translator to distinguish homonyms.
+Supplement 2 : Building an AI only for creating training data
+Background
+In the development of AI for classification, it often happens that a certain class has only a small number of training data, or that a new class is added that must be classified. As a countermeasure against such a situation, it is often desired to increase the accuracy of AI by creating additional training data only for a certain class.
+
+As an example, let us consider the following example of a questionnaire about sweets, where the response text is
+
+Class 1 : "References to sweetness
+Class 2 : "with reference to saltiness
+Class 3: "No mention of taste
+Class 3: "no mention of taste". Due to business needs, a new class was added.
+
+Class 4 : "Mentions spiciness" Class 5 : "Mentions spiciness" Class 6 : "Mentions spiciness"
+(Figure 1). However, there is not enough data on spiciness because we have not labeled the text that mentions spiciness. Therefore, we will consider a situation in which we collect new texts that mention spiciness and add them to the training data for Class 4 (Figure 1).
+
+
+Figure 1: Background example. From the text, we had classified the text as 'has mention of sweetness', 'has mention of saltiness', and 'no mention of taste', but 'has mention of spiciness' was added or there are cases where there is little data.
+Data Creation Procedure
+Simple filtering
+To obtain text that contains the intention of 'spicy' from the survey data
+
+(spicy OR hot OR hot) is included in the text.
+
+(hot OR spicy OR hot OR spicy) are included in order to obtain text that contains the intention of "spicy" from the survey data. However, the data collected under these conditions will not contain
+
+I've been having a really hard time lately, so I'm going to exercise to refresh myself.
+The data collected under this condition, however, may contain labels that do not refer to "taste" but to "pain," such as "I've been having a really hard time lately, so I'm going to exercise to relieve my pain. These labels are not suitable to be added as learning data, since they do not refer to taste, but rather to spiciness.
+
+Thus, there is a high possibility that wrong labels will be included in a filter as simple as keyword matching, so it is risky to add them to the learning data as they are. *1
+
+Create a system to identify data appropriate for Class
+Simple filtering alone is not suitable for training data, and it is necessary to select training data (spicy data as a taste) appropriate for a Class from among them (Figure 2). In this case, we have to rely on human power, but there are parts that can be automated by using an automatic translator or AI. (This is described below as a supplement at the end of this blog.)
+
+
+Figure 2: With only a light filter such as keyword matching, there is a lot of noise mixed in that is not suitable as training data. Therefore, it is necessary to select data suitable for the target class by a person or a system (using a translator, AI specialized for creating training data, etc.).
+Both data that is appropriate for the target Class and data that is not appropriate for the target Class are important.
+After the selection of appropriate data for the target Class is completed, it is easy to add to the target Class only the data that refers to spicy as a taste, as originally intended, and discard the data that is not appropriate for the target Class, and proceed to the learning process. However, if this approach is taken, the AI will incorrectly assume that data that does not mention spicy as a taste is also mentioned as spicy as a taste (Figure 3).
+
+
+Figure 3: Adding only data appropriate for the target Class will increase the number of false positive predictions.
+This problem is caused by teaching the AI only the data that should be in the target Class and not the data that should not. Therefore, to solve this problem, we need to add to the training data both the data that are screened out as unsuitable as well as the data that are suitable for the target (Figure 4).
+
+
+Figure 4: Notes on adding data. When adding "spicy," it is tempting to add to the target Class those that refer to "spicy as a taste," and discard "spicy used in the sense of painful" because it is inappropriate. However, if "painful used in the sense of hard" is eliminated and learned in this way, the AI cannot understand that "painful used in the sense of hard" is inappropriate, so it is expected to be placed in the Class of "hard (harsh)" even if it is used in the sense of hard. Therefore, it is necessary to include "painful in the sense of hard" and other words in other Classes as training data to teach that they are excluded from the Class of "mentions of hardness (karasa)".
+To do this, all data that are not appropriate for the target Class must be given other labels and added to the training data. However, this labeling process is time-consuming and costly, and should be avoided if possible. Therefore, in this blog, we will introduce a method for automatic labeling at the end of this section.
+
+Re-labeling data that is not appropriate for the target Class
+Manually labeling all data that is not appropriate for the target Class is very labor intensive. Therefore, by using an AI trained on data excluding the target Class (Figure 5 upper) to predict the data that do not belong to the target Class, and using them as labels, labels can be assigned even to a large amount of data (Figure 5 lower). *2
+
+
+Figure 5 How to label a tentative data using AI trained in a class other than the target class.
+In this way, AI accuracy can be improved by making good use of not only appropriate data for the target Class, but also inappropriate data.
+
+Conclusion
+In the business operation of AI, there are many situations in which the classification accuracy of one class is more important than another, or the performance required of AI changes with changes in the environment. It is relatively common for AI engineers to want to create special data only for a certain class in order for AI to respond to such requirements.
+
+In this case, it is easy to come up with a method to add only the appropriate data to the target class, but this method does not increase accuracy, and in some cases, it may even decrease it. In fact, the author has had a difficult experience in which the accuracy of AI did not increase despite the cooperation of various people and the addition of data created using a system. The main reason for this was that data that was not appropriate for the target Class was discarded. Therefore, in order to improve the accuracy of AI, data that is not appropriate for the target Class but close to the target Class should be added to other Classes, as described in this blog, and data that should not be in that Class should also be taught at the same time.
+
+Another point the author wanted to convey in this blog is that it is impossible to do all the annotation manually, so it is necessary to consider ways to simplify it as much as possible.
+
+In this blog, examples of the author's innovations include
+
+Classification of homonyms using an automatic translator
+Provisional labeling by AI (the following two in this blog)
+AI only for creating training data
+Re-labeling of data that does not fall into the target Class
+introduced in this blog. Various other innovations are also possible, such as classification of homonyms using MLM (Masked Langage Model).
+
+We hope this information will be useful to our readers when they find themselves in similar situations. If you can think of any other causes or devices other than those mentioned in this blog, please let me know on twitter.
+
+This document is about document classification, but the idea is equally applicable to other types of classification, including image classification.
+
+Supplementation
+As a supplement to this blog, I would like to introduce some techniques to automate data labeling to some extent.
+
+Supplement 1 : Using a translator to distinguish homonyms
+Since machine translation even takes context into account, it is sometimes possible to take advantage of the fact that homonyms in Japanese are also converted into other words when translated.
+
+As an example, the appropriate data for the taste
+
+I really like this spice because it is hot.
+into English (using DeepL)
+
+I really like this spice because it's hot.
+Spicy is converted to hot or spicy as in "I really like this spice because it's hot.
+
+On the other hand, the taste of spicy food is not appropriate
+
+I really like this spice because it's hot.
+(using DeepL)
+
+It's been really hard here lately, so I need to get some exercise and change things up.
+The word "hard" is converted to "hard".
+
+In this way, machine translation can be used to filter out homonyms by meaning.
+
+On the other hand, there is a risk of generating noise (mislabeling) with a certain probability in this method. If the percentage of noise generated here is low, the use of AI-based data cleansing would make sense.
+
+Supplement 2 : Building an AI only for creating training data
+Annotating all data by human or translation machine would cost a lot of time and money. However, it is possible to accumulate a certain amount of data by human power and develop a new AI that only diagnoses spicy data or not as a taste. If this AI can ensure a certain level of accuracy, annotation of training data can be created semi-automatically and quickly.
+
+Note: You may think, "If we can create an AI that can diagnose suitable data or not, why don't we use this AI in our service? However, this AI is a classification AI for data after simple filtering, so it is not suitable for inference of free text data with little generalization performance.
+
+*1: It may be possible to create an appropriate filter by adjusting various filtering conditions, but it tends to be a tussle with the rules. And finding those conditions takes a lot of time and effort. Rather, if that filter can be completed in the first place, then it can be used in the service, and there is no need to build an AI!
+
+*2: The labels here are temporary labels given by the AI, so learning is semi-supervised learning, not fully supervised learning.

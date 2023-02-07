@@ -1,0 +1,97 @@
+2022-04-12
+Multimodal and Multitasking Explainable AI to Support Risk Detection SaaS
+Attention CNN Grad-CAM PyTorch PyTorch Lightning Python Machine Learning Image Processing Data Science
+Editorial
+Hello everyone, my name is Juan Yonte and I am a Machine Learning Engineer at JX Press.
+
+My name is Juan Yongte, and I am a machine learning engineer at JX Press.
+
+Since SNS posts contain not only text but also images, videos, and other information, multimodal AI models are often used for SNS analysis. In this report, we will focus on the task of "judging risk information from SNS posts" and introduce visualization of the basis for judging multimodal AI models and how to improve the accuracy of such judgments.
+
+About FASTALERT
+FASTALERT" is a big data risk information service in which AI detects and distributes risk information from various big data including SNS. It has been adopted by NHK, all commercial key stations, and all general newspapers as an indispensable tool for news reporting, and has penetrated the majority of news organizations in Japan. In addition, it has recently been adopted by customers in a wide range of industries, including government, municipalities, and infrastructure companies, as an information tool for a wide range of needs, such as disaster prevention, BCP, failure monitoring, and supply chain risk management.URL: https://fastalert.jp
+
+f:id:yoooongtae:20220408110109p:plain
+
+Figure 1About FASTALART
+Challenges of the Risk Detection Task
+The nature of the task of detecting risk information from SNS requires the following four properties of an AI model
+
+We want to integrate all kinds of information, including images and text, to make a decision! (Multimodal)
+We want to predict not only the degree of risk, but also the category of risk information (e.g., disaster, incident, accident, etc.)!
+We do not want risk information to go undetected!
+We want our models to be explainable!
+Model architecture for multimodal, multitasking AI
+As mentioned in the introduction, SNS posts contain text, images, videos, and other information.
+
+In addition, FASTALERT not only detects and distributes risk information, but also analyzes and filters it down to categories (e.g., disaster, incident, accident, etc.). Having a single model multitasking and forecasting risk degree determination + risk category prediction not only satisfies business requirements, but also has the effect of increasing the risk detection capability itself.
+
+In summary, for the risk detection task from SNS, the
+
+Input data
+Text
+Image
+Output data
+Risk detection
+Category (disaster, incident, accident, etc.)
+The best AI is a "multimodal" and "multitasking" AI that is capable of
+
+Explainability of AI
+Due to the nature of AI to detect risk information, it is possible to visualize the basis of AI decisions, which can be useful for human monitoring and improvement. However, most publicly available AI is said to be a "black box," and the basis for its judgments cannot be well explained. Therefore, we developed an AI that can show the basis of its judgments and conducted experiments.
+
+In order to understand the basis of AI decisions, there are two policies: "understanding the behavior" and "understanding the mechanism.
+
+Understanding behavior" is a policy to understand the basis of decisions by observing changes in output when something is changed, and Grad_CAM, LIME, and SHAP are well-known methods. However, we decided not to implement this method because it is not intuitive to interpret the evidence in a multimodal model, and because it takes extra computation time, resulting in a loss of real-time performance.
+
+Attention" is a well-known method for understanding the mechanism of an AI model and finding the basis for decisions.
+
+Attention visualizes the point of interest, so interpretation is not so difficult.
+Since it is completed in a single forward calculation, it does not take extra calculation time.
+Therefore, we decided to use Attention to clarify the part that the AI focused on and to visualize the basis for judgment.
+
+Experiment
+About Risk Detection Capability
+With the model we created this time, we were able to achieve a reproducibility rate such that 99% of all risk information tweets could be detected. Our FASTALERT not only uses AI, but also eventually adds manned 24/7 monitoring to quickly detect risk information without omission and achieve higher quality delivery.
+
+The Basis for Model Decisions
+We have made it easier to obtain indicators for further improvement by visualizing the decision basis for detecting risk information in an easy-to-understand manner.
+
+Below are examples of analyzing Tweets of fire, flood, and rollover accident. The image shows the original on the left and the AI's focus on the right. The reddish color means that the AI paid more attention to the tweet.
+
+The following examples are not actual tweets, but pseudo-created data for publishing on the blog (the training itself was done with actual tweets).
+
+f:id:yoooongtae:20220408110826p:plain
+Figure 2 Data created to mimic a tweet about a fire. https://www.flickr.com/photos/sbeebe/7974757077から引用(license: CC BY 2.0).
+f:id:yoooongtae:2022040811111122p:plain
+Figure 3: Data mimicking tweets about flooding. https://pxhere.com/en/photo/852904から引用(license: CC 0.0).
+f:id:yoooongtae:20220408111350p:plain
+Figure 4 Data mimicking tweets about rollover accidents. https://pxhere.com/en/photo/619517から引用(license: CC BY 0.0)
+Looking at these results, it is clear that the AI focuses on the relevance of each word and the decision point in combination with the information in the image. For example, in the fire information in Figure 2, "fire engine" and "fire" are the focus of attention in the text, and the area of flames is the focus of attention in the image. Compare this result with the information on rollover accidents in Figure 4. The "fire truck" does not attract much attention in the case of rollover accidents. Comparing the information on heavy rain in Figure 3 and rollover accidents in Figure 4, we can also see that the attention to the word "road" changes. Furthermore, it is interesting to note that in the rollover accident text in Figure 4, the first word "accident" receives more attention, but the second word "accident" in the text does not. This means that even within the same sentence, the AI is able to distinguish the level of importance.
+
+Thus, we were able to create a multimodal, explainable AI that can handle complex language expressions that cannot be handled by simple word matching.
+
+Supplement 1: Other Preprocessing Devices
+We have made several preprocessing efforts with the aim of not leaking risk information. One of them is the handling of pictograms.
+
+SNS may contain pictograms among textual information. Although pictograms are often removed from natural language processing because they become noise, they can be important information for detecting risk information. For example, the following text information may contain risk information.
+
+Tokyo ⚡️ is in trouble → Lightning and torrential rain
+In front of Kanda station 🧑✈️👩✈️ there are a lot of them. What's going on?　→ Incident
+Tomei Expressway is full of 🚕 → Traffic accident
+We will not go into the details of the technology, but FASTALART's AI does not miss any of the information in these pictograms and uses it to detect risks so that no information is left undetected.
+
+Supplemental 2: Team-based R&D efforts
+The ML team at JX Press has interns, and Ryoto Ogawa, an intern, provided support for this experiment as well.
+
+As we have introduced in our engineering blog in the past, we use Pytorch Lightning-based template code for learning so that the team can conduct experiments efficiently.
+
+If you are interested, you can also read the following blogs
+tech.jxpress.net
+
+
+tech.jxpress.net
+
+We are looking for people who are up for the challenge with us!
+We are actively looking for people, both employees and interns, who want to develop ML for a better society while growing with us! We are not only looking for ML engineers, but also engineers of all kinds!
+
+We also have a "trial employment" program that allows you to work as a full-time employee, intern, or as a side job/return to work on a trial basis to learn about our culture and work style before deciding whether to officially join the company! If you are at all interested, please take a look here!

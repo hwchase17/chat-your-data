@@ -1,0 +1,77 @@
+2021-10-27
+How to develop a team for R&D that tends to belong to a particular field at JX Press.
+Machine Learning Communication Data Science
+Hello! My name is Hwang Yong Tae and I am an ML engineer at JX Press. I do my best every day to maximize the results not only for myself but also for the ML team!
+
+In order to maximize the use of human resources, the ML team at JX Press has adopted the slogan, "Focus only on where the power should be used! to maximize the use of human resources. This time, I would like to share with you more in-depth information about my presentation at a joint study session with Churadata and our company.
+
+For more information on this content, please refer to
+
+I presented at a joint study session with Churadata!
+
+
+speakerdeck.com
+
+If you want to watch the video, please click here
+
+if you would like to see the video.
+
+On the Genralization of R&D Tasks
+f:id:yoooongtae:20211015004452j:plain
+Figure 1: Team development in app development (left) and the way tasks are carried out in R&D teams.
+We develop apps such as NewsDigest, and at the app development stage, everyone in the team works together and cooperates toward a single goal of app development. (Figure 1 left)
+
+On the other hand, in many R&D tasks, one person is in charge of one task, isn't that the case? (Figure 1 right)
+
+f:id:yoooongtae:20211015004718p:plain
+Figure 2: Reasons and problems for R&D teams to become a genus
+There are many reasons why R&D tasks may become genus-specific, but the problem lies in the fact that it is very difficult for the members to cooperate with each other.
+
+Therefore, someone repeats the same difficulty as someone else, and so on. This is why it is very difficult to get cooperation among the members. This is not in line with our belief of "Let's focus our efforts only where they should be used! This is a deviation from our belief that we should only focus our efforts where they should be used.
+
+Here I would like to introduce some of the ways we at JX Press maximize team cooperation and avoid wasting time on unnecessary tasks, while at the same time fully utilizing the abilities of each individual.
+
+JX Press's innovations for teamwork in R&D
+Code Templating
+f:id:yoooongtae:20211015004824j:plain
+
+f:id:yoooongtae:20211015004829j:plain
+Figure 3: Templating the code
+A major cause of difficulty in creating cooperation within an R&D team is that it is tedious to read and understand other members' code. This tediousness occurs when individual members code freely without rules. To avoid this situation, JX Communication Inc. has developed templates that can be used for training and deploying machine learning models, respectively.
+
+The purpose of creating the templates is as follows
+
+To increase readability by making moderate corrections to the way the code is written
+To manage the learning environment using Poetry, so that the learning environment does not need to be a concern when learning is taken over, etc.
+By including useful tips such as MLflow (see below), even beginners can learn in a "nice" way.
+The templates are designed with the same concept as our belief, "Focus your efforts only where they should be used! The template is developed using Pytorch Lightning, which is based on the same concept as ours. (I am a heavy Pytorch Lightning user and will be presenting on Pytorch Lightning at the MLOps study group on November 17, 2021. If you would like to come, please come!)
+
+This template code is constantly updated by JX employees and interns to ensure that other members do not experience the hardship that someone once experienced.
+
+Centralized management of experiments using MLflow + App Engine
+f:id:yoooongtae:20211015005604j:plain
+Figure 4: Usage of mlflow at JX Press
+If we create a situation where only the experimenter knows the results of the experiment, the same experiment may be performed after the experiment is taken over, and the impact of the experiment on the results cannot be shared quantitatively. We can't do that! JX Press has created a system to manage the results of experiments conducted by everyone in one place, using Pytorch Lightning templates for learning, so experiment management can be done with a few lines of additional code. We use MLflow, a well-known OSS for experiment management.
+
+We have built an MLflow server on the App Engine and have incorporated it into the template code so that results and models are uploaded at the time of training. Therefore, using the template code, the training status and models are uploaded to GCS no matter which server (including google colab) is used for training (without the experimenter's awareness), so that all members of JX Press can keep track of all the experiments.
+
+The system notifies the learning status to Slack
+f:id:yoooongtae:20211015004216j:plain
+Figure 5: The system that notifies the learning status to Slack
+When multiple members share the learning of a pipeline model such as "Model A → Model B", it is often necessary to know the progress of other members' learning. While it is possible to directly ask a member about his or her progress, this would interfere with the member's concentration.
+
+Therefore, JX Press developed a template yesterday that automatically posts study progress information and results, such as accuracy, to Slack.
+
+Thus, if everyone at JX uses the template to study, the study status will be automatically shared in Slack!
+
+Conclusion
+In this article, we have discussed how team members can cooperate with each other in order to achieve the goal of "Focus your efforts only where they should be used! I talked about how to build an environment and system where team members can cooperate with each other to achieve the goal of "Focus only on the areas where you need to use your strength!
+
+Focus your efforts only where they are needed! There are some parts that can be solved by a system and some parts that cannot be solved by a system. In this talk, I focused on the areas that I thought could be solved by the system, but there are also areas that cannot be solved by the system (are we creating AI of value in the first place? Are you communicating well among members? I hope to write an article about this sometime in the future!
+
+JX Press's ML team will continue to grow and develop in cooperation with other ML teams as well!
+
+We are looking for people who are willing to take on challenges with us!
+We are actively looking for people, both employees and interns, who want to grow with us and develop ML for a better society! We are not only looking for ML engineers, but also engineers of all kinds!
+
+Full-time employees, interns, trial workers, etc.! If you are at all interested, please take a look here!
