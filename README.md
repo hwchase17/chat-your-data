@@ -1,17 +1,33 @@
-# Chat-Your-Data
+# 😆 Ask Everything About Me
 
-Create a ChatGPT like experience over your custom docs using [LangChain](https://github.com/hwchase17/langchain).
+This bot can do the following on your behalf
+- Analyze your tweets and show you what you are interested in these days.
+- Answer questions about you from your blog or profile.
 
-See [this blog post](https://blog.langchain.dev/tutorial-chatgpt-over-your-data/) for a more detailed explanation.
 
-## Ingest data
+# ⭐ Use Case
 
-Ingestion of data is done over the `state_of_the_union.txt` file. 
-Therefor, the only thing that is needed is to be done to ingest data is run `python ingest_data.py`
+The use cases I assume are as follows
 
-## Query data
-Custom prompts are used to ground the answers in the state of the union text file.
+- Individuals/companies can introduce themselves to individuals/companies
+- When you don't know how to write your introduction, Bot can help you
 
-## Running the Application
+I hope you will be able to customize this bot for your own use and use it to introduce yourself, especially as a job-seeking appeal.
 
-By running `python app.py` from the command line you can easily interact with your ChatGPT over your own data.
+The BOT is instructed to reply in a way that the questioner will like the interviewee via [prompt](query_data.py). 
+
+# 👀 Let's try!
+You can try this bot at [here](https://about-yongtae-cfa5uiil5a-an.a.run.app/).
+# 🧠 Basic architecture
+![architecture](/documents/architecture.png)
+
+This repository is made based on [🦜️🔗 LangChain](https://github.com/hwchase17/langchain), which is excellent library to make text generation application.
+
+ZeroShotAgent uses the following tools for answering questions.
+- **Get recent tweets**: Returns the content of recent tweets. From this content, bot can reply to the recent interests and trends of the interviewee. in this repo, I sellect twint libirally because tweet API in not stable right now.
+- **Question answering from docs**: Answer questions about you from pre-defined profiles, blogs, etc. The algorithm uses [HyDE](https://langchain.readthedocs.io/en/latest/modules/utils/combine_docs_examples/hyde.html?highlight=Hyde).
+
+
+# 🚀 Quick Custom
+You can customize your own BOT!
+If you want, see [here](https://github.com/Yongtae723/ask_everything_about_me)
