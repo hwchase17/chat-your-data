@@ -1,6 +1,6 @@
 beautifulsoup4
 langchain
 openai
-unstructured
+unstructured>=0.4.7
 faiss-cpu
 gradio

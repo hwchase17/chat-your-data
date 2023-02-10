@@ -53,7 +53,7 @@ block = gr.Blocks(css=".gradio-container {background-color: lightgray}")
 
 with block:
     with gr.Row():
-        gr.Markdown("<h3><center>Chat-Your-Data (State-of-the-Union)</center></h3>")
+        gr.Markdown("<h3><center>Chat-Your-Data (ISW Updates)</center></h3>")
 
         openai_api_key_textbox = gr.Textbox(
             placeholder="Paste your OpenAI API key (sk-...)",
@@ -67,25 +67,26 @@ with block:
     with gr.Row():
         message = gr.Textbox(
             label="What's your question?",
-            placeholder="Ask questions about the most recent state of the union",
+            placeholder="Ask questions about the war in Ukraine",
             lines=1,
         )
         submit = gr.Button(value="Send", variant="secondary").style(full_width=False)
 
     gr.Examples(
         examples=[
-            "What did the president say about Kentaji Brown Jackson",
-            "Did he mention Stephen Breyer?",
-            "What was his stance on Ukraine",
+            "What is the focus of the Russian offensive?",
+            "Where are the frontlines?",
+            "How are they consolidating power?",
         ],
         inputs=message,
     )
 
     gr.HTML("Demo application of a LangChain chain.")
 
-    gr.HTML(
-        "<center>Powered by <a href='https://github.com/hwchase17/langchain'>LangChain 🦜️🔗</a></center>"
-    )
+    gr.HTML("""<center>
+            Powered by <a href='https://github.com/hwchase17/langchain'>LangChain 🦜️🔗</a>
+            and <a href='https://github.com/unstructured-io/unstructured'>Unstructured.IO</a>
+        </center>""")
 
     state = gr.State()
     agent_state = gr.State()
