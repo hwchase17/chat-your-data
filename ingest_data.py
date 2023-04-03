@@ -1,11 +1,11 @@
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.document_loaders import UnstructuredFileLoader
+from langchain.document_loaders import PyPDFLoader
 from langchain.vectorstores.faiss import FAISS
 from langchain.embeddings import OpenAIEmbeddings
 import pickle
 
 # Load Data
-loader = UnstructuredFileLoader("state_of_the_union.txt")
+loader = PyPDFLoader("Acuerdo de accionistas.pdf")
 raw_documents = loader.load()
 
 # Split text
@@ -15,7 +15,7 @@ documents = text_splitter.split_documents(raw_documents)
 
 # Load Data to vectorstore
 embeddings = OpenAIEmbeddings()
-vectorstore = FAISS.from_documents(documents, embeddings)
+vectorstore = FAISS.from_documents(documents, embeddings).as_retriever()
 
 
 # Save vectorstore

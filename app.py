@@ -53,10 +53,10 @@ block = gr.Blocks(css=".gradio-container {background-color: lightgray}")
 
 with block:
     with gr.Row():
-        gr.Markdown("<h3><center>Chat-Your-Data (State-of-the-Union)</center></h3>")
+        gr.Markdown("<h3><center>Habla con tus Datos (Acuerdo de Accionistas)</center></h3>")
 
         openai_api_key_textbox = gr.Textbox(
-            placeholder="Paste your OpenAI API key (sk-...)",
+            placeholder="Pega tu contraseña aqui...",
             show_label=False,
             lines=1,
             type="password",
@@ -66,17 +66,17 @@ with block:
 
     with gr.Row():
         message = gr.Textbox(
-            label="What's your question?",
-            placeholder="Ask questions about the most recent state of the union",
+            label="Cual es tu pregunta?",
+            placeholder="Haz una pregunta acerca del Acuerdo de Accionistas",
             lines=1,
         )
-        submit = gr.Button(value="Send", variant="secondary").style(full_width=False)
+        submit = gr.Button(value="Mandar", variant="secondary").style(full_width=False)
 
     gr.Examples(
         examples=[
-            "What did the president say about Kentaji Brown Jackson",
-            "Did he mention Stephen Breyer?",
-            "What was his stance on Ukraine",
+            "Cuales son los valores de la familia Carvajal?",
+            "Puedes resumir el acuerdo de accionistas?",
+            "Que tengo que saber si quiero vender mis acciones?",
         ],
         inputs=message,
     )
