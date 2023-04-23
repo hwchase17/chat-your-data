@@ -4,6 +4,20 @@ Create a ChatGPT like experience over your custom docs using [LangChain](https:/
 
 See [this blog post](https://blog.langchain.dev/tutorial-chatgpt-over-your-data/) for a more detailed explanation.
 
+## Virtual Environment
+
+`python -m venv myenv`
+
+`source myenv/bin/activate`
+
+## Install Dependencies
+
+`pip install -r requirements.txt`
+
+## Open API Key
+
+`export OPENAI_API_KEY="..."`
+
 ## Ingest data
 
 Ingestion of data is done over the `state_of_the_union.txt` file. 
