@@ -3,3 +3,7 @@ openai
 unstructured
 faiss-cpu
 gradio
+tabulate
+pdf2image
+pytesseract
+tiktoken
