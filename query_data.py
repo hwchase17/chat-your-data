@@ -3,7 +3,7 @@ from langchain.llms import OpenAI
 from langchain.chains import ChatVectorDBChain
 
 _template = """Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
-You can assume the question about the most recent state of the union address.
+You can assume that the question will be regarding the content of several uploaded js files and what they contain.
 
 Chat History:
 {chat_history}
