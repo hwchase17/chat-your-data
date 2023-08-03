@@ -1,23 +1,27 @@
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.text_splitter import CharacterTextSplitter
 from langchain.document_loaders import UnstructuredFileLoader
 from langchain.vectorstores.faiss import FAISS
 from langchain.embeddings import OpenAIEmbeddings
 import pickle
 
-# Load Data
+
+print("Loading data...")
 loader = UnstructuredFileLoader("state_of_the_union.txt")
 raw_documents = loader.load()
 
-# Split text
-text_splitter = RecursiveCharacterTextSplitter()
+
+print("Splitting text...")
+text_splitter = CharacterTextSplitter(
+    separator="\n\n",
+    chunk_size=600,
+    chunk_overlap=100,
+    length_function=len,
+)
 documents = text_splitter.split_documents(raw_documents)
 
 
-# Load Data to vectorstore
+print("Creating vectorstore...")
 embeddings = OpenAIEmbeddings()
 vectorstore = FAISS.from_documents(documents, embeddings)
-
-
-# Save vectorstore
 with open("vectorstore.pkl", "wb") as f:
     pickle.dump(vectorstore, f)
