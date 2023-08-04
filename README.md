@@ -2,7 +2,7 @@
 
 Create a ChatGPT like experience over your custom docs using [LangChain](https://github.com/langchain-ai/langchain).
 
-See [this blog post](https://blog.langchain.dev/tutorial-chatgpt-over-your-data/) for a more detailed explanation.
+See [this blog post](blogpost.md) for a more detailed explanation.
 
 ## Step 0: Install requirements
 
