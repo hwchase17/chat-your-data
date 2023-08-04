@@ -1,6 +1,10 @@
+from langchain.chains import RetrievalQA, ConversationalRetrievalChain
 from langchain.prompts.prompt import PromptTemplate
-from langchain.llms import OpenAI
-from langchain.chains import ChatVectorDBChain
+from langchain.vectorstores.base import VectorStoreRetriever
+from langchain.chat_models import ChatOpenAI
+
+from langchain.memory import ConversationBufferMemory
+import pickle
 
 _template = """Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
 You can assume the question about the most recent state of the union address.
@@ -15,20 +19,92 @@ template = """You are an AI assistant for answering questions about the most rec
 You are given the following extracted parts of a long document and a question. Provide a conversational answer.
 If you don't know the answer, just say "Hmm, I'm not sure." Don't try to make up an answer.
 If the question is not about the most recent state of the union, politely inform them that you are tuned to only answer questions about the most recent state of the union.
+Lastly, answer the question as if you were a pirate from the south seas and are just coming back from a pirate expedition where you found a treasure chest full of gold doubloons.
 Question: {question}
 =========
 {context}
 =========
 Answer in Markdown:"""
-QA_PROMPT = PromptTemplate(template=template, input_variables=["question", "context"])
+QA_PROMPT = PromptTemplate(template=template, input_variables=[
+                           "question", "context"])
 
 
-def get_chain(vectorstore):
-    llm = OpenAI(temperature=0)
-    qa_chain = ChatVectorDBChain.from_llm(
-        llm,
-        vectorstore,
-        qa_prompt=QA_PROMPT,
+def load_retriever():
+    with open("vectorstore.pkl", "rb") as f:
+        vectorstore = pickle.load(f)
+    retriever = VectorStoreRetriever(vectorstore=vectorstore)
+    return retriever
+
+
+def get_basic_qa_chain():
+    llm = ChatOpenAI(model_name="gpt-4", temperature=0)
+    retriever = load_retriever()
+    memory = ConversationBufferMemory(
+        memory_key="chat_history", return_messages=True)
+    # model = RetrievalQA.from_llm(llm=llm, retriever=retriever)
+    # if you don't want memory use the above, you will have to change
+    # the app.py or cli_app.py file to include `query` in the input instead of `question`
+    model = ConversationalRetrievalChain.from_llm(
+        llm=llm,
+        retriever=retriever,
+        memory=memory)
+    return model
+
+
+def get_custom_prompt_qa_chain():
+    llm = ChatOpenAI(model_name="gpt-4", temperature=0)
+    retriever = load_retriever()
+    memory = ConversationBufferMemory(
+        memory_key="chat_history", return_messages=True)
+    # see: https://github.com/langchain-ai/langchain/issues/6635
+    # see: https://github.com/langchain-ai/langchain/issues/1497
+    model = ConversationalRetrievalChain.from_llm(
+        llm=llm,
+        retriever=retriever,
+        memory=memory,
+        combine_docs_chain_kwargs={"prompt": QA_PROMPT})
+    return model
+
+
+def get_condense_prompt_qa_chain():
+    llm = ChatOpenAI(model_name="gpt-4", temperature=0)
+    retriever = load_retriever()
+    memory = ConversationBufferMemory(
+        memory_key="chat_history", return_messages=True)
+    # see: https://github.com/langchain-ai/langchain/issues/5890
+    model = ConversationalRetrievalChain.from_llm(
+        llm=llm,
+        retriever=retriever,
+        memory=memory,
         condense_question_prompt=CONDENSE_QUESTION_PROMPT,
-    )
-    return qa_chain
+        combine_docs_chain_kwargs={"prompt": QA_PROMPT})
+    return model
+
+
+def get_qa_with_sources_chain():
+    llm = ChatOpenAI(model_name="gpt-4", temperature=0)
+    retriever = load_retriever()
+    history = []
+    model = ConversationalRetrievalChain.from_llm(
+        llm=llm,
+        retriever=retriever,
+        return_source_documents=True)
+
+    def model_func(question):
+        # bug: this doesn't work with the built-in memory
+        # hacking around it for the tutorial
+        # see: https://github.com/langchain-ai/langchain/issues/5630
+        new_input = {"question": question['question'], "chat_history": history}
+        result = model(new_input)
+        history.append((question['question'], result['answer']))
+        return result
+
+    return model_func
+
+
+chain_options = {
+    "basic": get_basic_qa_chain,
+    "with_sources": get_qa_with_sources_chain,
+    "custom_prompt": get_custom_prompt_qa_chain,
+    "condense_prompt": get_condense_prompt_qa_chain
+}

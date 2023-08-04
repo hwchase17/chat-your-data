@@ -1,5 +1,7 @@
 langchain
 openai
-unstructured
 faiss-cpu
+unstructured
+tiktoken
+rich #for console formatting
 gradio
