@@ -38,7 +38,7 @@ class ChatWrapper:
             import openai
             openai.api_key = api_key
             # Run chain and append input.
-            output = chain({"query": inp})["result"]
+            output = chain({"question": inp})["answer"]
             history.append((inp, output))
         except Exception as e:
             raise e

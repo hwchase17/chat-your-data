@@ -41,9 +41,6 @@ def get_basic_qa_chain():
     retriever = load_retriever()
     memory = ConversationBufferMemory(
         memory_key="chat_history", return_messages=True)
-    # model = RetrievalQA.from_llm(llm=llm, retriever=retriever)
-    # if you don't want memory use the above, you will have to change
-    # the app.py or cli_app.py file to include `query` in the input instead of `question`
     model = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=retriever,

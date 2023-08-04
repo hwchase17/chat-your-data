@@ -4,6 +4,10 @@ Create a ChatGPT like experience over your custom docs using [LangChain](https:/
 
 See [this blog post](https://blog.langchain.dev/tutorial-chatgpt-over-your-data/) for a more detailed explanation.
 
+## Step 0: Install requirements
+
+`pip install -r requirements.txt`
+
 ## Step 1: Set your open AI Key
 
 ```sh
@@ -15,7 +19,7 @@ export OPENAI_API_KEY=<your_key_here>
 
 Run: `python ingest_data.py`
 
-This builds `vectorstore.pkl` using OpenAI Embeddings and FAISS. TODO: Insert links
+This builds `vectorstore.pkl` using OpenAI Embeddings and FAISS.
 
 ## Query data
 
