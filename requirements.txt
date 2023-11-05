@@ -1,7 +1,7 @@
-langchain
+langchain==0.0.277
 openai
 faiss-cpu
 unstructured
 tiktoken
 rich #for console formatting
-gradio
+gradio==3.40.0
