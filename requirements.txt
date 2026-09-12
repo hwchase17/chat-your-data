@@ -1,7 +1,10 @@
-langchain
+langchain>=0.1
 openai
 faiss-cpu
 unstructured
 tiktoken
 rich #for console formatting
 gradio
+langchain-community>=0.0.20
+langchain-openai>=0.0.5
+langchain-text-splitters>=0.0.1
