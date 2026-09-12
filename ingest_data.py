@@ -1,7 +1,7 @@
-from langchain.text_splitter import CharacterTextSplitter
-from langchain.document_loaders import UnstructuredFileLoader
-from langchain.vectorstores.faiss import FAISS
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_text_splitters import CharacterTextSplitter
+from langchain_community.document_loaders import UnstructuredFileLoader
+from langchain_community.vectorstores.faiss import FAISS
+from langchain_openai import OpenAIEmbeddings
 import pickle
 
 

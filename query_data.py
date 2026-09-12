@@ -1,7 +1,7 @@
 from langchain.chains import RetrievalQA, ConversationalRetrievalChain
 from langchain.prompts.prompt import PromptTemplate
-from langchain.vectorstores.base import VectorStoreRetriever
-from langchain.chat_models import ChatOpenAI
+from langchain_community.vectorstores.base import VectorStoreRetriever
+from langchain_openai import ChatOpenAI
 
 from langchain.memory import ConversationBufferMemory
 import pickle
